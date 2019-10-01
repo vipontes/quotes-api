@@ -1,0 +1,12 @@
+{
+    "require": {
+        "slim/slim": "^3.12.2",
+        "tuupola/slim-basic-auth": "^3.2",
+        "tuupola/slim-jwt-auth": "^3.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "App"
+        }
+    }
+}
