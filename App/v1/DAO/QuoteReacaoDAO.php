@@ -1,8 +1,8 @@
 <?php
 
-namespace App\DAO;
+namespace App\v1\DAO;
 
-class UsuarioDAO extends Connection
+class QuoteReacaoDAO extends Connection
 {
     public function __construct()
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DAO;
+namespace App\v1\DAO;
 
 class ReacaoDAO extends Connection
 {

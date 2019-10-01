@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\v1\Controllers;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -9,7 +9,9 @@ final class UsuarioController
 {
     public function getUsuarios(Request $request, Response $response, array $args): Response
     {
-
+        $response = $response->withJson([
+            "message" => "Usuarios"
+        ]);
 
         return $response;
     }

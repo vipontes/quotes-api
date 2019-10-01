@@ -1,15 +1,19 @@
 <?php
 
-namespace App\Models;
+namespace App\v1\Models;
 
 final class UsuarioModel
 {
-    private $usuarioId;
-    private $usuarioNome;
-    private $usuarioEmail;
-    private $usuarioSenha;
-    private $usuarioAtivo;
-    private $usuarioSobre;
+    private $usuarioId = 0;
+    private $usuarioNome = '';
+    private $usuarioEmail = '';
+    private $usuarioSenha = '';
+    private $usuarioAtivo = 0;
+    private $usuarioSobre = '';
+
+    public function __construct()
+    {
+    }
 
     /**
      * Get the value of usuarioId

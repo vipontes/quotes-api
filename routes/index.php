@@ -5,7 +5,7 @@ use function src\{
     jwtAuth
 };
 
-use App\Controllers\{
+use App\v1\Controllers\{
     AuthController,
     QuoteController,
     QuoteRacaoController,
@@ -16,6 +16,7 @@ use App\Controllers\{
 $app = new \Slim\App(slimConfiguration());
 
 $app->group('/v1', function() use($app) {
+
     $app->post('/login', AuthController::class . ':login');
     $app->post('/refresh-token', AuthController::class . ':refreshToken');
 

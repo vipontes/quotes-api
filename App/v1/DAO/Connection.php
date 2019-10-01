@@ -1,6 +1,8 @@
 <?php
 
-namespace App\DAO;
+namespace App\v1\DAO;
+
+use PDO;
 
 abstract class Connection
 {
@@ -16,6 +18,7 @@ abstract class Connection
         $pass = getenv('DB_PASS');
         $dbname = getenv('DB_NAME');
         $dsn = "mysql:host={$host};dbname={$dbname};port={$port}";
+
         $this->pdo = new \PDO($dsn, $user, $pass, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
         $this->pdo->setAttribute(
             \PDO::ATTR_ERRMODE,
@@ -24,7 +27,7 @@ abstract class Connection
             \PDO::FETCH_ASSOC
         );
 
-        $now = new DateTime();
+        $now = new \DateTime();
         $mins = $now->getOffset() / 60;
         $sgn = ($mins < 0 ? -1 : 1);
         $mins = abs($mins);
