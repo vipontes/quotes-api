@@ -11,7 +11,11 @@ class UsuarioDAO extends Connection
         parent::__construct();
     }
 
-    public function getUsuarioPorEmail(string $email): ?UsuarioModel {
+    /**
+     * 
+     */
+    public function getUsuarioPorEmail(string $email): ?UsuarioModel
+    {
 
         $sql = "SELECT 
             usuario_id, 
@@ -27,18 +31,64 @@ class UsuarioDAO extends Connection
         $sth->execute(array(':usuario_email' => $email));
         $data = $sth->fetch();
 
-
-        if ( $data != false ) {
+        if ($data != false) {
             $usuario = new UsuarioModel();
 
-            $usuario->setUsuarioId($data['usuario_id']);
-            $usuario->setUsuarioNome($data['usuario_nome']);
-            $usuario->setUsuarioEmail($data['usuario_email']);
-            $usuario->setUsuarioSenha($data['usuario_senha']);
-            $usuario->setUsuarioAtivo($data['usuario_ativo']);
-            $usuario->setUsuarioSobre($data['usuario_sobre']);
+            $usuario->setUsuarioId($data['usuario_id'])
+                ->setUsuarioNome($data['usuario_nome'])
+                ->setUsuarioEmail($data['usuario_email'])
+                ->setUsuarioSenha($data['usuario_senha'])
+                ->setUsuarioAtivo($data['usuario_ativo'])
+                ->setUsuarioSobre($data['usuario_sobre']);
 
             return $usuario;
+        }
+
+        return null;
+    }
+
+    /**
+     * 
+     */
+    public function getUsuarios(): array
+    {
+        $sql = "SELECT
+            usuario_id,
+            usuario_nome,
+            usuario_email,
+            usuario_senha,
+            usuario_ativo,
+            usuario_sobre
+            FROM usuario
+            ORDER BY usuario_nome ASC";
+
+        $sth = $this->pdo->prepare($sql);
+        $sth->execute();
+        $data = $sth->fetchAll();
+        return $data;
+    }
+
+    /**
+     * 
+     */
+    public function getUsuario(int $usuarioId): ?array
+    {
+        $sql = "SELECT
+            usuario_id,
+            usuario_nome,
+            usuario_email,
+            usuario_senha,
+            usuario_ativo,
+            usuario_sobre
+            FROM usuario
+            WHERE usuario_id = :usuario_id";
+
+        $sth = $this->pdo->prepare($sql);
+        $sth->execute(array(':usuario_id' => $usuarioId));
+        $data = $sth->fetch();
+
+        if ($data != false) {
+            return $data;
         }
 
         return null;

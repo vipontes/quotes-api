@@ -16,7 +16,11 @@ final class JwtDateTimeMiddleware
         $now = new \DateTime();
 
         if ($expireDate < $now) {
-            return $response->withStatus(401);
+            $status = 401;
+            $result = array();
+            $result["success"] = false;
+            $result["message"] = MIDDLEWARE_EXPIRE_ERROR;
+            return $response->withJson($result, $status);
         }
 
         $response = $next($request, $response);

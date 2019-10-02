@@ -18,7 +18,7 @@ final class UsuarioModel
     /**
      * Get the value of usuarioId
      */ 
-    public function getUsuarioId()
+    public function getUsuarioId(): int
     {
         return $this->usuarioId;
     }
@@ -28,7 +28,7 @@ final class UsuarioModel
      *
      * @return  self
      */ 
-    public function setUsuarioId($usuarioId)
+    public function setUsuarioId($usuarioId): self
     {
         $this->usuarioId = $usuarioId;
 
@@ -38,100 +38,90 @@ final class UsuarioModel
     /**
      * Get the value of usuarioNome
      */ 
-    public function getUsuarioNome()
+    public function getUsuarioNome(): string
     {
         return $this->usuarioNome;
     }
 
     /**
      * Set the value of usuarioNome
-     *
      * @return  self
      */ 
-    public function setUsuarioNome($usuarioNome)
+    public function setUsuarioNome($usuarioNome): self
     {
         $this->usuarioNome = $usuarioNome;
-
         return $this;
     }
 
     /**
      * Get the value of usuarioEmail
      */ 
-    public function getUsuarioEmail()
+    public function getUsuarioEmail(): string
     {
         return $this->usuarioEmail;
     }
 
     /**
      * Set the value of usuarioEmail
-     *
      * @return  self
      */ 
-    public function setUsuarioEmail($usuarioEmail)
+    public function setUsuarioEmail($usuarioEmail): self
     {
         $this->usuarioEmail = $usuarioEmail;
-
         return $this;
     }
 
     /**
      * Get the value of usuarioSenha
      */ 
-    public function getUsuarioSenha()
+    public function getUsuarioSenha(): string
     {
         return $this->usuarioSenha;
     }
 
     /**
      * Set the value of usuarioSenha
-     *
      * @return  self
      */ 
-    public function setUsuarioSenha($usuarioSenha)
+    public function setUsuarioSenha($usuarioSenha): self
     {
         $this->usuarioSenha = $usuarioSenha;
-
         return $this;
     }
 
     /**
      * Get the value of usuarioAtivo
      */ 
-    public function getUsuarioAtivo()
+    public function getUsuarioAtivo(): int
     {
         return $this->usuarioAtivo;
     }
 
     /**
      * Set the value of usuarioAtivo
-     *
      * @return  self
      */ 
-    public function setUsuarioAtivo($usuarioAtivo)
+    public function setUsuarioAtivo($usuarioAtivo): self
     {
         $this->usuarioAtivo = $usuarioAtivo;
-
         return $this;
     }
 
     /**
      * Get the value of usuarioSobre
      */ 
-    public function getUsuarioSobre()
+    public function getUsuarioSobre(): string
     {
         return $this->usuarioSobre;
     }
 
     /**
      * Set the value of usuarioSobre
-     *
      * @return  self
      */ 
-    public function setUsuarioSobre($usuarioSobre)
+    public function setUsuarioSobre($usuarioSobre): self
     {
         $this->usuarioSobre = $usuarioSobre;
-
         return $this;
     }
 }

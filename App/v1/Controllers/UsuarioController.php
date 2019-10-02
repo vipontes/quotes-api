@@ -2,6 +2,7 @@
 
 namespace App\v1\Controllers;
 
+use App\v1\DAO\UsuarioDAO;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -9,19 +10,32 @@ final class UsuarioController
 {
     public function getUsuarios(Request $request, Response $response, array $args): Response
     {
-        $response = $response->withJson([
-            "message" => "Usuarios"
-        ]);
-
-        return $response;
+        $usuarioDAO = new UsuarioDAO();
+        $usuarios = $usuarioDAO->getUsuarios();
+        $status = 200;
+        header('Content-Type: application/json');
+        return $response->withJson($usuarios, $status);
     }
  
     public function getUsuario(Request $request, Response $response, array $args): Response
     {
-        $queryParams = $request->getQueryParams();
+        $usuarioId = $request->getAttribute('usuarioId');
 
+        $usuarioDAO = new UsuarioDAO();
+        $usuario = $usuarioDAO->getUsuario($usuarioId);
 
-        return $response;
+        if ( isset($usuario) ) {
+            $status = 200;
+            header('Content-Type: application/json');
+            return $response->withJson($usuario, $status);
+        } else {
+            $status = 404;
+            $result = array();
+            $result["success"] = false;
+            $result["message"] = USER_NOT_FOUND;
+            header('Content-Type: application/json');
+            return $response->withJson($result, $status);
+        }
     }
 
     public function postUsuario(Request $request, Response $response, array $args): Response
