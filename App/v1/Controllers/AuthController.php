@@ -8,7 +8,7 @@ use Firebase\JWT\JWT;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
-final class AuthController
+class AuthController extends BaseController
 {
     /**
      * @brief 
@@ -52,10 +52,16 @@ final class AuthController
     }
 
     public function login(Request $request, Response $response, array $args): Response {
-        $data = $request->getParsedBody();
+        
+        $input = $request->getParsedBody();
 
-        $email    = $data['email'] ?? '';
-        $password = $data['password'] ?? '';
+        $requiredData = $this->verifyRequiredParameters(['email', 'password'], $input);
+        if ($requiredData['success'] == false) {
+            return $response->withJson($requiredData, 404);
+        }        
+
+        $email    = $input['email'] ?? '';
+        $password = $input['password'] ?? '';
 
         $usuarioDAO = new UsuarioDAO();
         $usuario = $usuarioDAO->getUsuarioPorEmail($email);
@@ -98,8 +104,15 @@ final class AuthController
 
     public function refreshToken(Request $request, Response $response, array $args): Response
     {
-        $data = $request->getParsedBody();
-        $refreshToken = $data['refresh_token'];
+        $input = $request->getParsedBody();
+
+        $requiredData = $this->verifyRequiredParameters(['refresh_token'], $input);
+        if ($requiredData['success'] == false) {
+            return $response->withJson($requiredData, 404);
+        }  
+
+        $refreshToken = $input['refresh_token'];
+
         $refreshTokenDecoded = JWT::decode(
             $refreshToken,
             getenv('JWT_SECRET_KEY'),
@@ -133,21 +146,5 @@ final class AuthController
             return $response->withJson($result, 401);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
