@@ -10,6 +10,8 @@ final class UsuarioModel
     private $usuarioSenha = '';
     private $usuarioAtivo = 0;
     private $usuarioSobre = '';
+    private $token = '';
+    private $refreshToken = '';
 
     public function __construct()
     {
@@ -122,6 +124,46 @@ final class UsuarioModel
     public function setUsuarioSobre($usuarioSobre): self
     {
         $this->usuarioSobre = $usuarioSobre;
+        return $this;
+    }
+
+    /**
+     * Get the value of token
+     */ 
+    public function getToken(): string
+    {
+        return $this->token;
+    }
+
+    /**
+     * Set the value of token
+     *
+     * @return  self
+     */ 
+    public function setToken($token): self
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of refreshToken
+     */ 
+    public function getRefreshToken(): string
+    {
+        return $this->refreshToken;
+    }
+
+    /**
+     * Set the value of refreshToken
+     *
+     * @return  self
+     */ 
+    public function setRefreshToken($refreshToken): self
+    {
+        $this->refreshToken = $refreshToken;
+
         return $this;
     }
 }

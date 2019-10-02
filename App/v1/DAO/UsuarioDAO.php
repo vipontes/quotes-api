@@ -50,6 +50,38 @@ class UsuarioDAO extends Connection
     /**
      * 
      */
+    public function updateTokens(int $usuarioId, string $token, string $refreshToken): bool {
+        $sql = "UPDATE usuario SET 
+                token = :token, 
+                refresh_token = :refresh_token 
+                WHERE usuario_id = :usuario_id";
+
+        $sth = $this->pdo->prepare($sql);
+        $sth->execute(array(':token' => $token, 
+                            ':refresh_token' => $refreshToken, 
+                            ':usuario_id' => $usuarioId));
+        
+        return ($sth->rowCount() > 0);
+    }
+
+    /**
+     * 
+     */
+    public function verifyRefreshToken(string $refreshToken): bool
+    {
+        $sql = "SELECT usuario_id FROM usuario 
+                WHERE refresh_token = :refresh_token";
+        
+        $sth = $this->pdo->prepare($sql);
+        $sth->execute(array(':refresh_token' => $refreshToken));
+        $data = $sth->fetch();
+        
+        return ($data != false);
+    }
+
+    /**
+     * 
+     */
     public function getUsuarios(): array
     {
         $sql = "SELECT
