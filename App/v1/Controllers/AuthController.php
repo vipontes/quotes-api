@@ -10,19 +10,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 class AuthController extends BaseController
 {
-    /**
-     * @brief 
-     * @param string $algo The algorithm (md5, sha1, whirlpool, etc)
-     * @param string $data The data to encode
-     * @param string $salt The salt (This should be the same throughout the system probably)
-     * @return string The hashed/salted data
-     */
-    private function hash($algo, $data, $salt): string
-    {
-        $context = hash_init($algo, HASH_HMAC, $salt);
-        hash_update($context, $data);
-        return hash_final($context);
-    }
 
     private function updateUserToken(UsuarioModel $usuario): ?array {
         // Dados do usuário
@@ -60,8 +47,8 @@ class AuthController extends BaseController
             return $response->withJson($requiredData, 404);
         }        
 
-        $email    = $input['email'] ?? '';
-        $password = $input['password'] ?? '';
+        $email    = $input['email'];
+        $password = $input['password'];
 
         $usuarioDAO = new UsuarioDAO();
         $usuario = $usuarioDAO->getUsuarioPorEmail($email);

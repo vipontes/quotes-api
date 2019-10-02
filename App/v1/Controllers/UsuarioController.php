@@ -3,10 +3,11 @@
 namespace App\v1\Controllers;
 
 use App\v1\DAO\UsuarioDAO;
+use App\v1\Models\UsuarioModel;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
-final class UsuarioController
+class UsuarioController extends BaseController
 {
     public function getUsuarios(Request $request, Response $response, array $args): Response
     {
@@ -16,7 +17,7 @@ final class UsuarioController
         header('Content-Type: application/json');
         return $response->withJson($usuarios, $status);
     }
- 
+
     public function getUsuario(Request $request, Response $response, array $args): Response
     {
         $usuarioId = $request->getAttribute('usuarioId');
@@ -24,7 +25,7 @@ final class UsuarioController
         $usuarioDAO = new UsuarioDAO();
         $usuario = $usuarioDAO->getUsuario($usuarioId);
 
-        if ( isset($usuario) ) {
+        if ( $usuario != false ) {
             $status = 200;
             header('Content-Type: application/json');
             return $response->withJson($usuario, $status);
@@ -40,28 +41,103 @@ final class UsuarioController
 
     public function postUsuario(Request $request, Response $response, array $args): Response
     {
-        $data = $request->getParsedBody();
+        $input = $request->getParsedBody();
 
+        $requiredData = $this->verifyRequiredParameters(['usuario_nome', 'usuario_email', 'usuario_senha'], $input);
+        if ($requiredData['success'] == false) {
+            return $response->withJson($requiredData, 404);
+        }
 
+        $usuario_nome = $input['usuario_nome'];
+        $usuario_email = $input['usuario_email'];
+        $usuario_senha = $input['usuario_senha'];
+        $usuario_sobre = $input['usuario_sobre'] ?? '';
 
-        return $response;
+        $hash = getenv('HASH_PASSWORD_KEY');
+        $senha_hash = $this->hash('sha512', $usuario_senha, $hash);
+
+        $usuario = new UsuarioModel();
+        $usuario->setUsuarioNome($usuario_nome)
+            ->setUsuarioEmail($usuario_email)
+            ->setUsuarioSenha($senha_hash)
+            ->setUsuarioSobre($usuario_sobre);
+
+        $usuarioDAO = new UsuarioDAO();
+        $usuarioId = $usuarioDAO->postUsuario($usuario);
+
+        if (isset($usuarioId)) {
+            $status = 200;
+            $result = array();
+            $result['usuario_id'] = $usuarioId;
+            header('Content-Type: application/json');
+            return $response->withJson($result, $status);
+        } else {
+            $status = 401;
+            $result = array();
+            $result["success"] = false;
+            $result["message"] = $usuarioDAO->getLastError();
+            header('Content-Type: application/json');
+            return $response->withJson($result, $status);
+        }
     }
 
     public function putUsuario(Request $request, Response $response, array $args): Response
     {
-        $data = $request->getParsedBody();
+        $input = $request->getParsedBody();
 
+        $requiredData = $this->verifyRequiredParameters(['usuario_id'], $input);
+        if ($requiredData['success'] == false) {
+            return $response->withJson($requiredData, 404);
+        }
 
+        if (count($input) <= 1) {
+            $status = 400;
+            $response["success"] = false;
+            $response["message"] = ENDPOINT_PARAM_COUNT_ERROR;
+            return $this->response->withJson($response, $status);
+        }
 
-        return $response;
+        $usuarioDAO = new UsuarioDAO();
+        $update = $usuarioDAO->putUsuario($input);
+
+        if ($update) {
+            $status = 200;
+            $result = array();
+            $result["success"] = true;
+            $result["message"] = PDO_UPDATE_SUCCESS;
+            header('Content-Type: application/json');
+            return $response->withJson($result, $status);
+        } else {
+            $status = 401;
+            $result = array();
+            $result["success"] = false;
+            $result["message"] = $usuarioDAO->getLastError();
+            header('Content-Type: application/json');
+            return $response->withJson($result, $status);
+        }
     }
 
     public function deleteUsuario(Request $request, Response $response, array $args): Response
     {
-        $queryParams = $request->getQueryParams();
+        $usuarioId = $request->getAttribute('usuarioId');
 
+        $usuarioDAO = new UsuarioDAO();
+        $deleted = $usuarioDAO->deleteUsuario($usuarioId);
 
-
-        return $response;
+        if ( $deleted ) {
+            $status = 200;
+            $result = array();
+            $result["success"] = true;
+            $result["message"] = PDO_DELETE_SUCCESS;
+            header('Content-Type: application/json');
+            return $response->withJson($result, $status);
+        } else {
+            $status = 401;
+            $result = array();
+            $result["success"] = false;
+            $result["message"] = $usuarioDAO->getLastError();
+            header('Content-Type: application/json');
+            return $response->withJson($result, $status);
+        }
     }
 }

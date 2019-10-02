@@ -5,7 +5,7 @@ namespace App\v1\Controllers;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
-final class ReacaoController
+class ReacaoController extends BaseController
 {
     public function getReacoes(Request $request, Response $response, array $args): Response
     {

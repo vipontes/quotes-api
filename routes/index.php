@@ -28,21 +28,21 @@ $app->group('/v1', function() use($app) {
         $app->get('/usuario/{usuarioId}', UsuarioController::class . ':getUsuario');
         $app->post('/usuario', UsuarioController::class . ':postUsuario');
         $app->put('/usuario', UsuarioController::class . ':putUsuario');
-        $app->delete('/usuario', UsuarioController::class . ':deleteUsuario');
+        $app->delete('/usuario/{usuarioId}', UsuarioController::class . ':deleteUsuario');
         
         // Quotes
         $app->get('/quotes', QuoteController::class . ':getQuotes');
-        $app->get('/quote', QuoteController::class . ':getQuote');
+        $app->get('/quote/{quoteId}', QuoteController::class . ':getQuote');
         $app->post('/quote', QuoteController::class . ':postQuote');
         $app->put('/quote', QuoteController::class . ':putQuote');
-        $app->delete('/quote', QuoteController::class . ':deleteQuote');
+        $app->delete('/quote/{quoteId}', QuoteController::class . ':deleteQuote');
         
         // Reações
         $app->get('/reacoes', ReacaoController::class . ':getReacoes');
-        $app->get('/reacao', ReacaoController::class . ':getReacao');
+        $app->get('/reacao/{reacaoId}', ReacaoController::class . ':getReacao');
         $app->post('/reacao', ReacaoController::class . ':postReacao');
         $app->put('/reacao', ReacaoController::class . ':putReacao');
-        $app->delete('/reacao', ReacaoController::class . ':deleteReacao');
+        $app->delete('/reacao/{reacaoId}', ReacaoController::class . ':deleteReacao');
 
     })->add(new JwtDateTimeMiddleware())
       ->add(jwtAuth());
