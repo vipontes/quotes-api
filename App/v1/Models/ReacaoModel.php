@@ -2,11 +2,21 @@
 
 namespace App\v1\Models;
 
-final class ReacaoModel
+use JsonSerializable;
+
+final class ReacaoModel implements JsonSerializable
 {
     private $reacaoId;
     private $reacaoDescricao;
     private $reacaoIcon;
+
+    public function jsonSerialize() {
+        return [
+            'reacaoId' => $this->reacaoId,
+            'reacaoDescricao' => $this->reacaoDescricao,
+            'reacaoIcon' => $this->reacaoIcon
+        ];
+    }
 
     /**
      * Get the value of reacaoId

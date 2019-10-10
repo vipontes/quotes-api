@@ -7,7 +7,7 @@ use App\v1\Models\UsuarioModel;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
-class UsuarioController extends BaseController
+class UsuarioController extends BaseController 
 {
     public function getUsuarios(Request $request, Response $response, array $args): Response
     {
@@ -15,7 +15,7 @@ class UsuarioController extends BaseController
         $usuarios = $usuarioDAO->getUsuarios();
         $status = 200;
         header('Content-Type: application/json');
-        return $response->withJson($usuarios, $status);
+        return $response->withJson(json_encode($usuarios), $status);
     }
 
     public function getUsuario(Request $request, Response $response, array $args): Response
@@ -25,10 +25,10 @@ class UsuarioController extends BaseController
         $usuarioDAO = new UsuarioDAO();
         $usuario = $usuarioDAO->getUsuario($usuarioId);
 
-        if ( $usuario != false ) {
+        if ( $usuario != null ) {
             $status = 200;
             header('Content-Type: application/json');
-            return $response->withJson($usuario, $status);
+            return $response->withJson(json_encode($usuario), $status);
         } else {
             $status = 404;
             $result = array();

@@ -2,6 +2,8 @@
 
 namespace App\v1\DAO;
 
+use App\v1\Models\QuoteModel;
+
 class QuoteDAO extends Connection
 {
     private $lastError = '';
@@ -42,13 +44,30 @@ class QuoteDAO extends Connection
         $sth = $this->pdo->prepare($sql);
         $sth->execute();
         $data = $sth->fetchAll();
-        return $data;
+        
+        $res = [];
+
+        foreach ($data as $item) {
+            $quote = new QuoteModel();
+            $quote->setQuoteId($item['quote_id'])
+                ->setUsuarioId($item['usuario_id'])
+                ->setUsuarioNome($item['usuario_nome'])
+                ->setQuoteDataCriacao($item['quote_data_criacao'])
+                ->setQuoteConteudo($item['quote_conteudo'])
+                ->setQuoteConteudoOfensivo($item['quote_conteudo_ofensivo'])
+                ->setQuoteUsuarioConteudoOfensivoId($item['quote_usuario_conteudo_ofensivo_id'])
+                ->setUsuarioDenunciaNome($item['usuario_denuncia_nome']);
+
+                $res[] = $quote;
+        }
+
+        return $res;
     }
 
     /**
      * 
      */
-    public function getQuote(int $quoteId): ?array
+    public function getQuote(int $quoteId): ?QuoteModel
     {
         $sql = "SELECT
             q.quote_id,
@@ -69,7 +88,17 @@ class QuoteDAO extends Connection
         $data = $sth->fetch();
 
         if ($data != false) {
-            return $data;
+            $quote = new QuoteModel();
+            $quote->setQuoteId($data['quote_id'])
+                ->setUsuarioId($data['usuario_id'])
+                ->setUsuarioNome($data['usuario_nome'])
+                ->setQuoteDataCriacao($data['quote_data_criacao'])
+                ->setQuoteConteudo($data['quote_conteudo'])
+                ->setQuoteConteudoOfensivo($data['quote_conteudo_ofensivo'])
+                ->setQuoteUsuarioConteudoOfensivoId($data['quote_usuario_conteudo_ofensivo_id'])
+                ->setUsuarioDenunciaNome($data['usuario_denuncia_nome']);
+
+            return $quote;
         }
 
         return null;

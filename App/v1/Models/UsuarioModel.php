@@ -2,7 +2,9 @@
 
 namespace App\v1\Models;
 
-final class UsuarioModel
+use JsonSerializable;
+
+final class UsuarioModel implements JsonSerializable
 {
     private $usuarioId = 0;
     private $usuarioNome = '';
@@ -13,8 +15,17 @@ final class UsuarioModel
     private $token = '';
     private $refreshToken = '';
 
-    public function __construct()
-    {
+    public function jsonSerialize() {
+        return [
+            'usuarioId' => $this->usuarioId,
+            'usuarioNome' => $this->usuarioNome,
+            'usuarioEmail' => $this->usuarioEmail,
+            'usuarioSenha' => $this->usuarioSenha,
+            'usuarioAtivo' => $this->usuarioAtivo,
+            'usuarioSobre' => $this->usuarioSobre,
+            'token' => $this->token,
+            'refreshToken' => $this->refreshToken
+        ];
     }
 
     /**

@@ -62,6 +62,15 @@ class AuthController extends BaseController
             return $response->withJson($result, $status);
         }
 
+        if ($usuario->getUsuarioAtivo() == 0 ) {
+            $status = 401;
+            $result = array();
+            $result["success"] = false;
+            $result["message"] = LOGIN_INACTIVE;
+            header('Content-Type: application/json');
+            return $response->withJson($result, $status);
+        }
+
         $hash = getenv('HASH_PASSWORD_KEY');
         $senha_hash = $this->hash('sha512', $password, $hash);
 

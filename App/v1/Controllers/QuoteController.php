@@ -14,7 +14,7 @@ class QuoteController extends BaseController
         $quotes = $quoteDAO->getQuotes();
         $status = 200;
         header('Content-Type: application/json');
-        return $response->withJson($quotes, $status);
+        return $response->withJson(json_encode($quotes), $status);
     }
  
     public function getQuote(Request $request, Response $response, array $args): Response
@@ -27,7 +27,7 @@ class QuoteController extends BaseController
         if ($quote != false) {
             $status = 200;
             header('Content-Type: application/json');
-            return $response->withJson($quote, $status);
+            return $response->withJson(json_encode($quote), $status);
         } else {
             $status = 404;
             $result = array();

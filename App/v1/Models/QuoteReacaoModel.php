@@ -2,12 +2,23 @@
 
 namespace App\v1\Models;
 
-final class QuoteReacaoModel
+use JsonSerializable;
+
+final class QuoteReacaoModel implements JsonSerializable
 {
     private $quoteId;
     private $usuarioId;
     private $reacaoId;
     private $quoteReacaoData;
+
+    public function jsonSerialize() {
+        return [
+            'quoteId' => $this->quoteId,
+            'usuarioId' => $this->usuarioId,
+            'reacaoId' => $this->reacaoId,
+            'quoteReacaoData' => $this->quoteReacaoData
+        ];
+    }    
 
     /**
      * Get the value of quoteId

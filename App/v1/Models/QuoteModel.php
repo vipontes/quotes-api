@@ -2,7 +2,9 @@
 
 namespace App\v1\Models;
 
-final class QuoteModel
+use JsonSerializable;
+
+final class QuoteModel implements JsonSerializable
 {
     private $quoteId;
     private $usuarioId;
@@ -10,6 +12,21 @@ final class QuoteModel
     private $quoteConteudo;
     private $quoteConteudoOfensivo;
     private $quoteUsuarioConteudoOfensivoId;
+    private $usuarioNome;
+    private $usuarioDenunciaNome;
+
+    public function jsonSerialize() {
+        return [
+            'quoteId' => $this->quoteId,
+            'usuarioId' => $this->usuarioId,
+            'quoteDataCriacao' => $this->quoteDataCriacao,
+            'quoteConteudo' => $this->quoteConteudo,
+            'quoteConteudoOfensivo' => $this->quoteConteudoOfensivo,
+            'quoteUsuarioConteudoOfensivoId' => $this->quoteUsuarioConteudoOfensivoId,
+            'usuarioNome' => $this->usuarioNome,
+            'usuarioDenunciaNome' => $this->usuarioDenunciaNome
+        ];
+    }
 
     /**
      * Get the value of quoteId
@@ -127,6 +144,46 @@ final class QuoteModel
     public function setQuoteUsuarioConteudoOfensivoId($quoteUsuarioConteudoOfensivoId)
     {
         $this->quoteUsuarioConteudoOfensivoId = $quoteUsuarioConteudoOfensivoId;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of usuarioNome
+     */ 
+    public function getUsuarioNome()
+    {
+        return $this->usuarioNome;
+    }
+
+    /**
+     * Set the value of usuarioNome
+     *
+     * @return  self
+     */ 
+    public function setUsuarioNome($usuarioNome)
+    {
+        $this->usuarioNome = $usuarioNome;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of usuarioDenunciaNome
+     */ 
+    public function getUsuarioDenunciaNome()
+    {
+        return $this->usuarioDenunciaNome;
+    }
+
+    /**
+     * Set the value of usuarioDenunciaNome
+     *
+     * @return  self
+     */ 
+    public function setUsuarioDenunciaNome($usuarioDenunciaNome)
+    {
+        $this->usuarioDenunciaNome = $usuarioDenunciaNome;
 
         return $this;
     }

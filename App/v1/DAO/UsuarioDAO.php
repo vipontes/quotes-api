@@ -108,20 +108,40 @@ class UsuarioDAO extends Connection
             usuario_email,
             usuario_senha,
             usuario_ativo,
-            usuario_sobre
+            usuario_sobre,
+            token,
+            refresh_token
             FROM usuario
             ORDER BY usuario_nome ASC";
 
         $sth = $this->pdo->prepare($sql);
         $sth->execute();
         $data = $sth->fetchAll();
-        return $data;
+
+        $res = [];
+
+        foreach ($data as $item) {
+            $usuario = new UsuarioModel();
+
+            $usuario->setUsuarioId($item['usuario_id'])
+                ->setUsuarioNome($item['usuario_nome'])
+                ->setUsuarioEmail($item['usuario_email'])
+                ->setUsuarioSenha($item['usuario_senha'])
+                ->setUsuarioAtivo($item['usuario_ativo'])
+                ->setUsuarioSobre($item['usuario_sobre'])
+                ->setToken($item['token'])
+                ->setRefreshToken($item['refresh_token']);
+
+                $res[] = $usuario;
+        }
+
+        return $res;
     }
 
     /**
      * 
      */
-    public function getUsuario(int $usuarioId): ?array
+    public function getUsuario(int $usuarioId): ?UsuarioModel
     {
         $sql = "SELECT
             usuario_id,
@@ -129,7 +149,9 @@ class UsuarioDAO extends Connection
             usuario_email,
             usuario_senha,
             usuario_ativo,
-            usuario_sobre
+            usuario_sobre,
+            token,
+            refresh_token
             FROM usuario
             WHERE usuario_id = :usuario_id";
 
@@ -138,7 +160,18 @@ class UsuarioDAO extends Connection
         $data = $sth->fetch();
 
         if ($data != false) {
-            return $data;
+            $usuario = new UsuarioModel();
+
+            $usuario->setUsuarioId($data['usuario_id'])
+                ->setUsuarioNome($data['usuario_nome'])
+                ->setUsuarioEmail($data['usuario_email'])
+                ->setUsuarioSenha($data['usuario_senha'])
+                ->setUsuarioAtivo($data['usuario_ativo'])
+                ->setUsuarioSobre($data['usuario_sobre'])
+                ->setToken($data['token'])
+                ->setRefreshToken($data['refresh_token']);
+
+            return $usuario;
         }
 
         return null;
