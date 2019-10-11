@@ -2,7 +2,7 @@
 
 namespace App\v1\Controllers;
 
-use App\v1\DAO\UsuarioDAO;
+use App\v1\DAO\{UsuarioDAO, UsuarioDispositivoDAO};
 use App\v1\Models\UsuarioModel;
 use Firebase\JWT\JWT;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -11,12 +11,13 @@ use Psr\Http\Message\ResponseInterface as Response;
 class AuthController extends BaseController
 {
 
-    private function updateUserToken(UsuarioModel $usuario): ?array {
+    private function updateUserToken(UsuarioModel $usuario, string $usuarioDispositivo): ?array {
         // Dados do usuário
         $tokenPayload = [
             'usuarioId' => $usuario->getUsuarioId(),
             'usuarioNome' => $usuario->getUsuarioNome(),
             'usuarioEmail' => $usuario->getUsuarioEmail(),
+            'usuarioDispositivo' => $usuarioDispositivo,
             'expired_at' => (new \DateTime())->modify('+2 hour')->format('Y-m-d H:i:s')
         ];
         $token = JWT::encode($tokenPayload, getenv('JWT_SECRET_KEY'));
@@ -24,12 +25,13 @@ class AuthController extends BaseController
         // 
         $refreshTokenPayload = [
             'usuarioEmail' => $usuario->getUsuarioEmail(),
+            'usuarioDispositivo' => $usuarioDispositivo,
             'random' => uniqid()
         ];
         $refreshToken = JWT::encode($refreshTokenPayload, getenv('JWT_SECRET_KEY'));
 
-        $usuarioDAO = new UsuarioDAO();
-        $updateOk = $usuarioDAO->updateTokens($usuario->getUsuarioId(), $token, $refreshToken);
+        $usuarioDispositivoDAO = new UsuarioDispositivoDAO();
+        $updateOk = $usuarioDispositivoDAO->updateTokens($usuario->getUsuarioId(), $token, $refreshToken, $usuarioDispositivo);
 
         if ( $updateOk ) {
             return ["token" => $token, "refresh_token" => $refreshToken];
@@ -42,13 +44,14 @@ class AuthController extends BaseController
         
         $input = $request->getParsedBody();
 
-        $requiredData = $this->verifyRequiredParameters(['email', 'password'], $input);
+        $requiredData = $this->verifyRequiredParameters(['email', 'password', 'device'], $input);
         if ($requiredData['success'] == false) {
             return $response->withJson($requiredData, 404);
         }        
 
         $email    = $input['email'];
         $password = $input['password'];
+        $device   = $input['device'];
 
         $usuarioDAO = new UsuarioDAO();
         $usuario = $usuarioDAO->getUsuarioPorEmail($email);
@@ -83,7 +86,7 @@ class AuthController extends BaseController
             return $response->withJson($result, $status);
         }
 
-        $tokens = $this->updateUserToken($usuario);
+        $tokens = $this->updateUserToken($usuario, $device);
 
         if ( $tokens != null ) {
             $response = $response->withJson($tokens, 200);        
@@ -128,8 +131,9 @@ class AuthController extends BaseController
         }
 
         $usuario = $usuarioDAO->getUsuarioPorEmail($refreshTokenDecoded->usuarioEmail);
+        $device = $refreshTokenDecoded->usuarioDispositivo;
 
-        $tokens = $this->updateUserToken($usuario);
+        $tokens = $this->updateUserToken($usuario, $device);
 
         if ( $tokens != null ) {
             $response = $response->withJson($tokens, 200);        

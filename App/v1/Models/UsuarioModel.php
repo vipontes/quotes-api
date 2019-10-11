@@ -12,8 +12,6 @@ final class UsuarioModel implements JsonSerializable
     private $usuarioSenha = '';
     private $usuarioAtivo = 0;
     private $usuarioSobre = '';
-    private $token = '';
-    private $refreshToken = '';
 
     public function jsonSerialize() {
         return [
@@ -22,9 +20,7 @@ final class UsuarioModel implements JsonSerializable
             'usuarioEmail' => $this->usuarioEmail,
             'usuarioSenha' => $this->usuarioSenha,
             'usuarioAtivo' => $this->usuarioAtivo,
-            'usuarioSobre' => $this->usuarioSobre,
-            'token' => $this->token,
-            'refreshToken' => $this->refreshToken
+            'usuarioSobre' => $this->usuarioSobre
         ];
     }
 
@@ -135,46 +131,6 @@ final class UsuarioModel implements JsonSerializable
     public function setUsuarioSobre($usuarioSobre): self
     {
         $this->usuarioSobre = $usuarioSobre;
-        return $this;
-    }
-
-    /**
-     * Get the value of token
-     */ 
-    public function getToken(): string
-    {
-        return $this->token;
-    }
-
-    /**
-     * Set the value of token
-     *
-     * @return  self
-     */ 
-    public function setToken($token): self
-    {
-        $this->token = $token;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of refreshToken
-     */ 
-    public function getRefreshToken(): string
-    {
-        return $this->refreshToken;
-    }
-
-    /**
-     * Set the value of refreshToken
-     *
-     * @return  self
-     */ 
-    public function setRefreshToken($refreshToken): self
-    {
-        $this->refreshToken = $refreshToken;
-
         return $this;
     }
 }

@@ -13,7 +13,7 @@ use App\v1\Controllers\{
     UsuarioController
 };
 
-use App\v1\Middlewares\JwtDateTimeMiddleware;
+use App\v1\Middlewares\{JwtDateTimeMiddleware, ValidTokenMiddleware};
 
 $app = new \Slim\App(slimConfiguration());
 

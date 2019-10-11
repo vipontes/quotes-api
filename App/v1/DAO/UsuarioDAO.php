@@ -60,46 +60,6 @@ class UsuarioDAO extends Connection
     /**
      * 
      */
-    public function updateTokens(int $usuarioId, string $token, string $refreshToken): bool
-    {
-        $sql = "UPDATE usuario SET 
-                token = :token, 
-                refresh_token = :refresh_token 
-                WHERE usuario_id = :usuario_id";
-        try {
-            $sth = $this->pdo->prepare($sql);
-            $sth->execute(array(
-                ':token' => $token,
-                ':refresh_token' => $refreshToken,
-                ':usuario_id' => $usuarioId
-            ));
-
-            return ($sth->rowCount() > 0);
-        } catch (PDOException $e) {
-            $this->lastError = $e->getMessage();
-        }
-
-        return false;
-    }
-
-    /**
-     * 
-     */
-    public function verifyRefreshToken(string $refreshToken): bool
-    {
-        $sql = "SELECT usuario_id FROM usuario 
-                WHERE refresh_token = :refresh_token";
-
-        $sth = $this->pdo->prepare($sql);
-        $sth->execute(array(':refresh_token' => $refreshToken));
-        $data = $sth->fetch();
-
-        return ($data != false);
-    }
-
-    /**
-     * 
-     */
     public function getUsuarios(): array
     {
         $sql = "SELECT
@@ -108,9 +68,7 @@ class UsuarioDAO extends Connection
             usuario_email,
             usuario_senha,
             usuario_ativo,
-            usuario_sobre,
-            token,
-            refresh_token
+            usuario_sobre
             FROM usuario
             ORDER BY usuario_nome ASC";
 
@@ -128,9 +86,7 @@ class UsuarioDAO extends Connection
                 ->setUsuarioEmail($item['usuario_email'])
                 ->setUsuarioSenha($item['usuario_senha'])
                 ->setUsuarioAtivo($item['usuario_ativo'])
-                ->setUsuarioSobre($item['usuario_sobre'])
-                ->setToken($item['token'])
-                ->setRefreshToken($item['refresh_token']);
+                ->setUsuarioSobre($item['usuario_sobre']);
 
                 $res[] = $usuario;
         }
@@ -149,9 +105,7 @@ class UsuarioDAO extends Connection
             usuario_email,
             usuario_senha,
             usuario_ativo,
-            usuario_sobre,
-            token,
-            refresh_token
+            usuario_sobre
             FROM usuario
             WHERE usuario_id = :usuario_id";
 
@@ -167,9 +121,7 @@ class UsuarioDAO extends Connection
                 ->setUsuarioEmail($data['usuario_email'])
                 ->setUsuarioSenha($data['usuario_senha'])
                 ->setUsuarioAtivo($data['usuario_ativo'])
-                ->setUsuarioSobre($data['usuario_sobre'])
-                ->setToken($data['token'])
-                ->setRefreshToken($data['refresh_token']);
+                ->setUsuarioSobre($data['usuario_sobre']);
 
             return $usuario;
         }

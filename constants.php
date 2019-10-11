@@ -16,5 +16,6 @@ define('PDO_DELETE_SUCCESS', 'Registro excluido com sucesso!');
 define('PDO_DELETE_ERROR', 'Erro ao excluir o registro no banco de dados');
 
 define('MIDDLEWARE_EXPIRE_ERROR', 'O token de acesso expirou. Efetue o login novamente.');
+define('MIDDLEWARE_TOKEN_NOT_VALID', 'O token de acesso é inválido. Efetue o login novamente.');
 define('UPDATE_TOKEN_ERROR', 'Ocorreu um erro ao gravar o token na base de dados.');
 define('INVALID_REFRESH_TOKEN', 'Refresh token inválido');
