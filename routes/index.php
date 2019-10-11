@@ -44,6 +44,12 @@ $app->group('/v1', function() use($app) {
         $app->put('/reacao', ReacaoController::class . ':putReacao');
         $app->delete('/reacao/{reacaoId}', ReacaoController::class . ':deleteReacao');
 
+        // Reações nos quotes
+        $app->get('/quote-reacao/{usuarioId}/{quoteId}', QuoteReacaoController::class . ':getQuoteReacao');
+        $app->get('/quote-reacao/count/{quoteId}', QuoteReacaoController::class . ':getQuoteReacaoCount');
+        $app->post('/quote-reacao', QuoteReacaoController::class . ':postQuoteReacao');
+        $app->delete('/quote-reacao/{usuarioId}/{reacaoId}', QuoteReacaoController::class . ':deleteQuoteReacao');
+
     })->add(new JwtDateTimeMiddleware())
       ->add(jwtAuth());
 });

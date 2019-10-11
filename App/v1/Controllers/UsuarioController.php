@@ -11,8 +11,8 @@ class UsuarioController extends BaseController
 {
     public function getUsuarios(Request $request, Response $response, array $args): Response
     {
-        $usuarioDAO = new UsuarioDAO();
-        $usuarios = $usuarioDAO->getUsuarios();
+        $dataAccessObject = new UsuarioDAO();
+        $usuarios = $dataAccessObject->getUsuarios();
         $status = 200;
         header('Content-Type: application/json');
         return $response->withJson(json_encode($usuarios), $status);
@@ -22,8 +22,8 @@ class UsuarioController extends BaseController
     {
         $usuarioId = $request->getAttribute('usuarioId');
 
-        $usuarioDAO = new UsuarioDAO();
-        $usuario = $usuarioDAO->getUsuario($usuarioId);
+        $dataAccessObject = new UsuarioDAO();
+        $usuario = $dataAccessObject->getUsuario($usuarioId);
 
         if ( $usuario != null ) {
             $status = 200;
@@ -62,8 +62,8 @@ class UsuarioController extends BaseController
             ->setUsuarioSenha($senha_hash)
             ->setUsuarioSobre($usuario_sobre);
 
-        $usuarioDAO = new UsuarioDAO();
-        $usuarioId = $usuarioDAO->postUsuario($usuario);
+        $dataAccessObject = new UsuarioDAO();
+        $usuarioId = $dataAccessObject->postUsuario($usuario);
 
         if (isset($usuarioId)) {
             $status = 200;
@@ -75,7 +75,7 @@ class UsuarioController extends BaseController
             $status = 401;
             $result = array();
             $result["success"] = false;
-            $result["message"] = $usuarioDAO->getLastError();
+            $result["message"] = $dataAccessObject->getLastError();
             header('Content-Type: application/json');
             return $response->withJson($result, $status);
         }
@@ -97,8 +97,8 @@ class UsuarioController extends BaseController
             return $this->response->withJson($response, $status);
         }
 
-        $usuarioDAO = new UsuarioDAO();
-        $update = $usuarioDAO->putUsuario($input);
+        $dataAccessObject = new UsuarioDAO();
+        $update = $dataAccessObject->putUsuario($input);
 
         if ($update) {
             $status = 200;
@@ -111,7 +111,7 @@ class UsuarioController extends BaseController
             $status = 401;
             $result = array();
             $result["success"] = false;
-            $result["message"] = $usuarioDAO->getLastError();
+            $result["message"] = $dataAccessObject->getLastError();
             header('Content-Type: application/json');
             return $response->withJson($result, $status);
         }
@@ -121,8 +121,8 @@ class UsuarioController extends BaseController
     {
         $usuarioId = $request->getAttribute('usuarioId');
 
-        $usuarioDAO = new UsuarioDAO();
-        $deleted = $usuarioDAO->deleteUsuario($usuarioId);
+        $dataAccessObject = new UsuarioDAO();
+        $deleted = $dataAccessObject->deleteUsuario($usuarioId);
 
         if ( $deleted ) {
             $status = 200;
@@ -135,7 +135,7 @@ class UsuarioController extends BaseController
             $status = 401;
             $result = array();
             $result["success"] = false;
-            $result["message"] = $usuarioDAO->getLastError();
+            $result["message"] = $dataAccessObject->getLastError();
             header('Content-Type: application/json');
             return $response->withJson($result, $status);
         }

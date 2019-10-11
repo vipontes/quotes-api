@@ -10,13 +10,17 @@ final class QuoteReacaoModel implements JsonSerializable
     private $usuarioId;
     private $reacaoId;
     private $quoteReacaoData;
+    private $reacaoDescricao;
+    private $reacaoIcon;
 
     public function jsonSerialize() {
         return [
             'quoteId' => $this->quoteId,
             'usuarioId' => $this->usuarioId,
             'reacaoId' => $this->reacaoId,
-            'quoteReacaoData' => $this->quoteReacaoData
+            'quoteReacaoData' => $this->quoteReacaoData,
+            'reacaoDescricao' => $this->reacaoDescricao,
+            'reacaoIcon' => $this->reacaoIcon
         ];
     }    
 
@@ -96,6 +100,46 @@ final class QuoteReacaoModel implements JsonSerializable
     public function setQuoteReacaoData($quoteReacaoData)
     {
         $this->quoteReacaoData = $quoteReacaoData;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of reacaoDescricao
+     */ 
+    public function getReacaoDescricao()
+    {
+        return $this->reacaoDescricao;
+    }
+
+    /**
+     * Set the value of reacaoDescricao
+     *
+     * @return  self
+     */ 
+    public function setReacaoDescricao($reacaoDescricao)
+    {
+        $this->reacaoDescricao = $reacaoDescricao;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of reacaoIcon
+     */ 
+    public function getReacaoIcon()
+    {
+        return $this->reacaoIcon;
+    }
+
+    /**
+     * Set the value of reacaoIcon
+     *
+     * @return  self
+     */ 
+    public function setReacaoIcon($reacaoIcon)
+    {
+        $this->reacaoIcon = $reacaoIcon;
 
         return $this;
     }

@@ -10,8 +10,8 @@ class QuoteController extends BaseController
 {
     public function getQuotes(Request $request, Response $response, array $args): Response
     {
-        $quoteDAO = new QuoteDAO();
-        $quotes = $quoteDAO->getQuotes();
+        $dataAccessObject = new QuoteDAO();
+        $quotes = $dataAccessObject->getQuotes();
         $status = 200;
         header('Content-Type: application/json');
         return $response->withJson(json_encode($quotes), $status);
@@ -21,8 +21,8 @@ class QuoteController extends BaseController
     {
         $quoteId = $request->getAttribute('quoteId');
 
-        $quoteDAO = new QuoteDAO();
-        $quote = $quoteDAO->getQuote($quoteId);
+        $dataAccessObject = new QuoteDAO();
+        $quote = $dataAccessObject->getQuote($quoteId);
 
         if ($quote != false) {
             $status = 200;
@@ -50,8 +50,8 @@ class QuoteController extends BaseController
         $usuario_id = $input['usuario_id'];
         $quote_conteudo = $input['quote_conteudo'];
 
-        $quoteDAO = new QuoteDAO();
-        $quoteId = $quoteDAO->postQuote($usuario_id, $quote_conteudo);
+        $dataAccessObject = new QuoteDAO();
+        $quoteId = $dataAccessObject->postQuote($usuario_id, $quote_conteudo);
 
         if (isset($quoteId)) {
             $status = 200;
@@ -63,7 +63,7 @@ class QuoteController extends BaseController
             $status = 401;
             $result = array();
             $result["success"] = false;
-            $result["message"] = $quoteDAO->getLastError();
+            $result["message"] = $dataAccessObject->getLastError();
             header('Content-Type: application/json');
             return $response->withJson($result, $status);
         }
@@ -85,8 +85,8 @@ class QuoteController extends BaseController
             return $this->response->withJson($response, $status);
         }
 
-        $quoteDAO = new QuoteDAO();
-        $update = $quoteDAO->putQuote($input);
+        $dataAccessObject = new QuoteDAO();
+        $update = $dataAccessObject->putQuote($input);
 
         if ($update) {
             $status = 200;
@@ -99,7 +99,7 @@ class QuoteController extends BaseController
             $status = 401;
             $result = array();
             $result["success"] = false;
-            $result["message"] = $quoteDAO->getLastError();
+            $result["message"] = $dataAccessObject->getLastError();
             header('Content-Type: application/json');
             return $response->withJson($result, $status);
         }
@@ -109,8 +109,8 @@ class QuoteController extends BaseController
     {
         $quoteId = $request->getAttribute('quoteId');
 
-        $quoteDAO = new QuoteDAO();
-        $deleted = $quoteDAO-deleteQuote($quoteId);
+        $dataAccessObject = new QuoteDAO();
+        $deleted = $dataAccessObject-deleteQuote($quoteId);
 
         if ( $deleted ) {
             $status = 200;
@@ -123,7 +123,7 @@ class QuoteController extends BaseController
             $status = 401;
             $result = array();
             $result["success"] = false;
-            $result["message"] = $quoteDAO->getLastError();
+            $result["message"] = $dataAccessObject->getLastError();
             header('Content-Type: application/json');
             return $response->withJson($result, $status);
         }

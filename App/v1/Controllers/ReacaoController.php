@@ -10,8 +10,8 @@ class ReacaoController extends BaseController
 {
     public function getReacoes(Request $request, Response $response, array $args): Response
     {
-        $reacaoDAO = new ReacaoDAO();
-        $reacoes = $reacaoDAO->getReacoes();
+        $dataAccessObject = new ReacaoDAO();
+        $reacoes = $dataAccessObject->getReacoes();
         $status = 200;
         header('Content-Type: application/json');
         return $response->withJson(json_encode($reacoes), $status);
@@ -21,8 +21,8 @@ class ReacaoController extends BaseController
     {
         $reacaoId = $request->getAttribute('reacaoId');
 
-        $reacaoDAO = new ReacaoDAO();
-        $reacao = $reacaoDAO->getReacao($reacaoId);
+        $dataAccessObject = new ReacaoDAO();
+        $reacao = $dataAccessObject->getReacao($reacaoId);
 
         if ( $reacao != null ) {
             $status = 200;
@@ -50,8 +50,8 @@ class ReacaoController extends BaseController
         $reacao_descricao = $input['reacao_descricao'];
         $reacao_icon = $input['reacao_icon'];
 
-        $reacaoDAO = new ReacaoDAO();
-        $reacaoId = $reacaoDAO->postReacao($reacao_descricao, $reacao_icon);
+        $dataAccessObject = new ReacaoDAO();
+        $reacaoId = $dataAccessObject->postReacao($reacao_descricao, $reacao_icon);
 
         if (isset($reacaoId)) {
             $status = 200;
@@ -63,7 +63,7 @@ class ReacaoController extends BaseController
             $status = 401;
             $result = array();
             $result["success"] = false;
-            $result["message"] = $reacaoDAO->getLastError();
+            $result["message"] = $dataAccessObject->getLastError();
             header('Content-Type: application/json');
             return $response->withJson($result, $status);
         }
@@ -85,8 +85,8 @@ class ReacaoController extends BaseController
             return $this->response->withJson($response, $status);
         }
 
-        $reacaoDAO = new ReacaoDAO();
-        $update = $reacaoDAO->putReacao($input);
+        $dataAccessObject = new ReacaoDAO();
+        $update = $dataAccessObject->putReacao($input);
 
         if ($update) {
             $status = 200;
@@ -99,7 +99,7 @@ class ReacaoController extends BaseController
             $status = 401;
             $result = array();
             $result["success"] = false;
-            $result["message"] = $usuarioDAO->getLastError();
+            $result["message"] = $dataAccessObject->getLastError();
             header('Content-Type: application/json');
             return $response->withJson($result, $status);
         }
@@ -109,8 +109,8 @@ class ReacaoController extends BaseController
     {
         $reacaoId = $request->getAttribute('reacaoId');
 
-        $reacaoDAO = new ReacaoDAO();
-        $deleted = $reacaoDAO->deleteReacao($reacaoId);
+        $dataAccessObject = new ReacaoDAO();
+        $deleted = $dataAccessObject->deleteReacao($reacaoId);
 
         if ( $deleted ) {
             $status = 200;
@@ -123,7 +123,7 @@ class ReacaoController extends BaseController
             $status = 401;
             $result = array();
             $result["success"] = false;
-            $result["message"] = $usuarioDAO->getLastError();
+            $result["message"] = $dataAccessObject->getLastError();
             header('Content-Type: application/json');
             return $response->withJson($result, $status);
         }

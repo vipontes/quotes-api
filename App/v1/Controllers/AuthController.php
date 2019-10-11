@@ -10,7 +10,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 class AuthController extends BaseController
 {
-
     private function updateUserToken(UsuarioModel $usuario, string $usuarioDispositivo): ?array {
         // Dados do usuário
         $tokenPayload = [
@@ -30,8 +29,8 @@ class AuthController extends BaseController
         ];
         $refreshToken = JWT::encode($refreshTokenPayload, getenv('JWT_SECRET_KEY'));
 
-        $usuarioDispositivoDAO = new UsuarioDispositivoDAO();
-        $updateOk = $usuarioDispositivoDAO->updateTokens($usuario->getUsuarioId(), $token, $refreshToken, $usuarioDispositivo);
+        $dataAccessObject = new UsuarioDispositivoDAO();
+        $updateOk = $dataAccessObject->updateTokens($usuario->getUsuarioId(), $token, $refreshToken, $usuarioDispositivo);
 
         if ( $updateOk ) {
             return ["token" => $token, "refresh_token" => $refreshToken];
@@ -146,5 +145,4 @@ class AuthController extends BaseController
             return $response->withJson($result, 401);
         }
     }
-
 }
