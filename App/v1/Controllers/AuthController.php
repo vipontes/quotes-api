@@ -118,8 +118,9 @@ class AuthController extends BaseController
         );
 
         $usuarioDAO = new UsuarioDAO();
+        $usuarioDispositivoDAO = new UsuarioDispositivoDAO();
 
-        $refreshTokenExists = $usuarioDAO->verifyRefreshToken($refreshToken);
+        $refreshTokenExists = $usuarioDispositivoDAO->verifyRefreshToken($refreshToken);
         if(!$refreshTokenExists){
             $status = 401;
             $result = array();

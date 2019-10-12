@@ -4,6 +4,7 @@ define('LOGIN_EMAIL_ERROR', 'E-mail inválido');
 define('LOGIN_PASSWORD_ERROR', 'Senha inválida');
 define('LOGIN_INACTIVE', 'Seu acesso ao sistema foi bloqueado. Entre em contato com o administrador.');
 
+define('USER_PASSWORD_CHANGED', 'Senha alterada com sucesso!');
 define('USER_NOT_FOUND', 'Usuário não encontrado');
 define('QUOTE_NOT_FOUND', 'Citação não encontrada');
 

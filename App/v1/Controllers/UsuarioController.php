@@ -140,4 +140,109 @@ class UsuarioController extends BaseController
             return $response->withJson($result, $status);
         }
     }
+
+    public function changePassword(Request $request, Response $response, array $args): Response
+    {
+        $input = $request->getParsedBody();
+
+        $requiredData = $this->verifyRequiredParameters(['usuario_id', 'usuario_senha', 'usuario_nova_senha'], $input);
+        if ($requiredData['success'] == false) {
+            return $response->withJson($requiredData, 404);
+        }
+
+        $usuarioId = $input['usuario_id'];
+        $usuarioSenha = $input['usuario_senha'];
+        $usuarioNovaSenha = $input['usuario_nova_senha'];
+
+        $hash = getenv('HASH_PASSWORD_KEY');
+        $senhaHash = $this->hash('sha512', $usuarioSenha, $hash);
+        $novaSenhaHash = $this->hash('sha512', $usuarioNovaSenha, $hash);
+
+        $dataAccessObject = new UsuarioDAO();
+        $usuarioModel = $dataAccessObject->getUsuario($usuarioId);
+
+        if ( $senhaHash != $usuarioModel->getUsuarioSenha() ) {
+            $status = 401;
+            $result = array();
+            $result["success"] = false;
+            $result["message"] = LOGIN_PASSWORD_ERROR;
+            header('Content-Type: application/json');
+            return $response->withJson($result, $status);
+        }
+
+        if ( $senhaHash == $novaSenhaHash ) {
+            $status = 200;
+            $result = array();
+            $result["success"] = true;
+            $result["message"] = USER_PASSWORD_CHANGED;
+            header('Content-Type: application/json');
+            return $response->withJson($result, $status);
+        }
+
+        if ( $dataAccessObject->putUsuario(['usuario_id' => $usuarioId, 'usuario_senha' => $usuarioNovaSenha]) ) {
+            $status = 200;
+            $result = array();
+            $result["success"] = true;
+            $result["message"] = USER_PASSWORD_CHANGED;
+            header('Content-Type: application/json');
+            return $response->withJson($result, $status);
+        } else {
+            $status = 401;
+            $result = array();
+            $result["success"] = false;
+            $result["message"] = $dataAccessObject->getLastError();
+            header('Content-Type: application/json');
+            return $response->withJson($result, $status);
+        }
+    }
+
+    public function esqueciMinhaSenha(Request $request, Response $response, array $args): Response
+    {
+        $input = $request->getParsedBody();
+
+        $requiredData = $this->verifyRequiredParameters(['usuario_email'], $input);
+        if ($requiredData['success'] == false) {
+            return $response->withJson($requiredData, 404);
+        }
+
+        $usuarioEmail = $input['usuario_email'];
+
+        $hash = getenv('HASH_PASSWORD_KEY');
+
+        $senha = substr(md5(rand(999, 999999)), 0, 8);
+        $senhaHash = $this->hash('sha512', $senha, $hash);
+
+        $dataAccessObject = new UsuarioDAO();
+        $usuarioModel = $dataAccessObject->getUsuarioPorEmail($usuarioEmail);
+
+        if(is_null($usuarioModel)) {
+            $status = 401;
+            $result = array();
+            $result["success"] = false;
+            $result["message"] = LOGIN_EMAIL_ERROR;
+            header('Content-Type: application/json');
+            return $response->withJson($result, $status);
+        }
+        
+        /*
+            Falta implementar o envio do e-mail e remover o campo newPass do retorno (solução provisória)
+        */
+
+        if ( $dataAccessObject->putUsuario(['usuario_id' => $usuarioModel->getUsuarioId(), 'usuario_senha' => $senhaHash]) ) {
+            $status = 200;
+            $result = array();
+            $result["success"] = true;
+            $result["message"] = USER_PASSWORD_CHANGED;
+            $result["newPass"] = $senha;
+            header('Content-Type: application/json');
+            return $response->withJson($result, $status);
+        } else {
+            $status = 401;
+            $result = array();
+            $result["success"] = false;
+            $result["message"] = $dataAccessObject->getLastError();
+            header('Content-Type: application/json');
+            return $response->withJson($result, $status);
+        }
+    }
 }
