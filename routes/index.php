@@ -22,12 +22,12 @@ $app->group('/v1', function() use($app) {
     $app->post('/login', AuthController::class . ':login');
     $app->post('/refresh-token', AuthController::class . ':refreshToken');
     $app->post('/esqueci-minha-senha', UsuarioController::class . ':esqueciMinhaSenha');
+    $app->post('/usuario', UsuarioController::class . ':postUsuario');
 
     $app->group('', function() use ($app) {
         // Usuários
         $app->get('/usuarios', UsuarioController::class . ':getUsuarios');
         $app->get('/usuario/{usuarioId}', UsuarioController::class . ':getUsuario');
-        $app->post('/usuario', UsuarioController::class . ':postUsuario');
         $app->put('/usuario', UsuarioController::class . ':putUsuario');
         $app->put('/usuario/atualiza-senha', UsuarioController::class . ':changePassword');
         $app->delete('/usuario/{usuarioId}', UsuarioController::class . ':deleteUsuario');
