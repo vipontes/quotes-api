@@ -2,6 +2,8 @@
 
 namespace App\v1\Controllers;
 
+use ReflectionClass;
+
 abstract class BaseController
 {
     /**
@@ -40,5 +42,15 @@ abstract class BaseController
         }
 
         return ['success' => true, 'message' => ''];
+    }
+
+    function objectToArray($obj)
+    {
+        $result = array();
+        $cls = new ReflectionClass($obj);
+        $props = $cls->getProperties();
+        foreach ($props as $prop) {
+            $result[$prop->getName()] = $prop->getValue($obj);
+        }
     }
 }

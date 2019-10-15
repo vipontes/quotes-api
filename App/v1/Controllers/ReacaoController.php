@@ -14,7 +14,7 @@ class ReacaoController extends BaseController
         $reacoes = $dataAccessObject->getReacoes();
         $status = 200;
         header('Content-Type: application/json');
-        return $response->withJson(json_encode($reacoes), $status);
+        return $response->withJson($reacoes, $status);
     }
  
     public function getReacao(Request $request, Response $response, array $args): Response
@@ -27,7 +27,7 @@ class ReacaoController extends BaseController
         if ( $reacao != null ) {
             $status = 200;
             header('Content-Type: application/json');
-            return $response->withJson(json_encode($reacao), $status);
+            return $response->withJson($reacao, $status);
         } else {
             $status = 404;
             $result = array();

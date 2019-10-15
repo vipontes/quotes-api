@@ -19,7 +19,7 @@ class QuoteReacaoController extends BaseController
         if ( $reacao != null ) {
             $status = 200;
             header('Content-Type: application/json');
-            return $response->withJson(json_encode($reacao), $status);
+            return $response->withJson($reacao, $status);
         } else {
             $status = 404;
             $result = array();
@@ -40,7 +40,7 @@ class QuoteReacaoController extends BaseController
         if ( $count != null ) {
             $status = 200;
             header('Content-Type: application/json');
-            return $response->withJson(json_encode(array('up' => $count[0], 'down' => $count[1])), $status);
+            return $response->withJson(array('up' => $count[0], 'down' => $count[1]), $status);
         } else {
             $status = 404;
             $result = array();

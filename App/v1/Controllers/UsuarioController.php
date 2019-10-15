@@ -7,7 +7,7 @@ use App\v1\Models\UsuarioModel;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
-class UsuarioController extends BaseController 
+class UsuarioController extends BaseController
 {
     public function getUsuarios(Request $request, Response $response, array $args): Response
     {
@@ -15,7 +15,7 @@ class UsuarioController extends BaseController
         $usuarios = $dataAccessObject->getUsuarios();
         $status = 200;
         header('Content-Type: application/json');
-        return $response->withJson(json_encode($usuarios), $status);
+        return $response->withJson($usuarios, $status);
     }
 
     public function getUsuario(Request $request, Response $response, array $args): Response
@@ -25,10 +25,10 @@ class UsuarioController extends BaseController
         $dataAccessObject = new UsuarioDAO();
         $usuario = $dataAccessObject->getUsuario($usuarioId);
 
-        if ( $usuario != null ) {
+        if ($usuario != null) {
             $status = 200;
             header('Content-Type: application/json');
-            return $response->withJson(json_encode($usuario), $status);
+            return $response->withJson($usuario, $status);
         } else {
             $status = 404;
             $result = array();
@@ -124,7 +124,7 @@ class UsuarioController extends BaseController
         $dataAccessObject = new UsuarioDAO();
         $deleted = $dataAccessObject->deleteUsuario($usuarioId);
 
-        if ( $deleted ) {
+        if ($deleted) {
             $status = 200;
             $result = array();
             $result["success"] = true;
@@ -161,7 +161,7 @@ class UsuarioController extends BaseController
         $dataAccessObject = new UsuarioDAO();
         $usuarioModel = $dataAccessObject->getUsuario($usuarioId);
 
-        if ( $senhaHash != $usuarioModel->getUsuarioSenha() ) {
+        if ($senhaHash != $usuarioModel->getUsuarioSenha()) {
             $status = 401;
             $result = array();
             $result["success"] = false;
@@ -170,7 +170,7 @@ class UsuarioController extends BaseController
             return $response->withJson($result, $status);
         }
 
-        if ( $senhaHash == $novaSenhaHash ) {
+        if ($senhaHash == $novaSenhaHash) {
             $status = 200;
             $result = array();
             $result["success"] = true;
@@ -179,7 +179,7 @@ class UsuarioController extends BaseController
             return $response->withJson($result, $status);
         }
 
-        if ( $dataAccessObject->putUsuario(['usuario_id' => $usuarioId, 'usuario_senha' => $usuarioNovaSenha]) ) {
+        if ($dataAccessObject->putUsuario(['usuario_id' => $usuarioId, 'usuario_senha' => $usuarioNovaSenha])) {
             $status = 200;
             $result = array();
             $result["success"] = true;
@@ -215,7 +215,7 @@ class UsuarioController extends BaseController
         $dataAccessObject = new UsuarioDAO();
         $usuarioModel = $dataAccessObject->getUsuarioPorEmail($usuarioEmail);
 
-        if(is_null($usuarioModel)) {
+        if (is_null($usuarioModel)) {
             $status = 401;
             $result = array();
             $result["success"] = false;
@@ -223,12 +223,12 @@ class UsuarioController extends BaseController
             header('Content-Type: application/json');
             return $response->withJson($result, $status);
         }
-        
+
         /*
             Falta implementar o envio do e-mail e remover o campo newPass do retorno (solução provisória)
         */
 
-        if ( $dataAccessObject->putUsuario(['usuario_id' => $usuarioModel->getUsuarioId(), 'usuario_senha' => $senhaHash]) ) {
+        if ($dataAccessObject->putUsuario(['usuario_id' => $usuarioModel->getUsuarioId(), 'usuario_senha' => $senhaHash])) {
             $status = 200;
             $result = array();
             $result["success"] = true;
