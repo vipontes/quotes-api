@@ -42,23 +42,21 @@ class QuoteController extends BaseController
     {
         $input = $request->getParsedBody();
 
-        $requiredData = $this->verifyRequiredParameters(['usuario_id', 'quote_conteudo'], $input);
+        $requiredData = $this->verifyRequiredParameters(['usuarioId', 'quoteConteudo'], $input);
         if ($requiredData['success'] == false) {
             return $response->withJson($requiredData, 404);
         }
 
-        $usuario_id = $input['usuario_id'];
-        $quote_conteudo = $input['quote_conteudo'];
+        $usuarioId = $input['usuarioId'];
+        $quoteConteudo = $input['quoteConteudo'];
 
         $dataAccessObject = new QuoteDAO();
-        $quoteId = $dataAccessObject->postQuote($usuario_id, $quote_conteudo);
+        $quoteId = $dataAccessObject->postQuote($usuarioId, $quoteConteudo);
 
         if (isset($quoteId)) {
             $status = 200;
-            $result = array();
-            $result['quote_id'] = $quoteId;
             header('Content-Type: application/json');
-            return $response->withJson($result, $status);
+            return $response->withJson($quoteId, $status);
         } else {
             $status = 401;
             $result = array();
