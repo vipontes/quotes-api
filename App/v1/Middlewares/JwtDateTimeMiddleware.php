@@ -24,6 +24,7 @@ final class JwtDateTimeMiddleware
             $status = 401;
             $result = array();
             $result["success"] = false;
+            $result["expired"] = true;
             $result["message"] = MIDDLEWARE_EXPIRE_ERROR;
             return $response->withJson($result, $status);
         }

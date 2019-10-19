@@ -8,7 +8,7 @@ use function src\{
 use App\v1\Controllers\{
     AuthController,
     QuoteController,
-    QuoteRacaoController,
+    QuoteReacaoController,
     ReacaoController,
     UsuarioController
 };

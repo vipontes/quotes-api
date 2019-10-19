@@ -15,7 +15,7 @@ class QuoteReacaoDAO extends Connection
 
     /**
      * Get the value of lastError
-     */ 
+     */
     public function getLastError()
     {
         return $this->lastError;
@@ -82,9 +82,14 @@ class QuoteReacaoDAO extends Connection
      */
     public function postQuoteReacao(int $usuarioId, int $quoteId, int $reacaoId): ?int
     {
-        $query = "INSERT INTO quote_reacao (usuario_id, quote_id, reacao_id) VALUES (:usuario_id, :quote_id, :reacao_id)";
-        
+        $query = "DELETE FROM quote_reacao WHERE usuario_id = :usuario_id AND quote_id = :quote_id";
+
         try {
+            $sth = $this->pdo->prepare($query);
+            $sth->execute([':usuario_id' => $usuarioId, ':quote_id' => $quoteId]);
+
+
+            $query = "INSERT INTO quote_reacao (usuario_id, quote_id, reacao_id) VALUES (:usuario_id, :quote_id, :reacao_id)";
             $sth = $this->pdo->prepare($query);
             $sth->execute([
                 ':usuario_id' => $usuarioId,
@@ -109,7 +114,8 @@ class QuoteReacaoDAO extends Connection
     /**
      * 
      */
-    public function deleteQuoteReacao(int $quoteId, int $usuarioId): bool {
+    public function deleteQuoteReacao(int $quoteId, int $usuarioId): bool
+    {
 
         $query = "DELETE FROM quote_reacao WHERE quote_id = :quote_id AND usuario_id = :usuario_id";
 

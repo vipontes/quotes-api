@@ -3,6 +3,7 @@
 namespace App\v1\Controllers;
 
 use App\v1\DAO\QuoteReacaoDAO;
+use App\v1\Models\QuoteReacaoModel;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -55,25 +56,28 @@ class QuoteReacaoController extends BaseController
     {
         $input = $request->getParsedBody();
 
-        $requiredData = $this->verifyRequiredParameters(['usuario_id', 'quote_id', 'reacao_id'], $input);
+        $requiredData = $this->verifyRequiredParameters(['usuarioId', 'quoteId', 'reacaoId'], $input);
         if ($requiredData['success'] == false) {
             return $response->withJson($requiredData, 404);
         }
 
-        $usuarioId = $input['usuario_id'];
-        $quoteId = $input['quote_id'];
-        $reacaoId = $input['reacao_id'];
+        $usuarioId = $input['usuarioId'];
+        $quoteId = $input['quoteId'];
+        $reacaoId = $input['reacaoId'];
 
-        $dataAccessObject = new QuoteDAO();
+        $dataAccessObject = new QuoteReacaoDAO();
         $result = $dataAccessObject->postQuoteReacao($usuarioId, $quoteId, $reacaoId);
 
         if (isset($result)) {
+
+            $quoteReacao = new QuoteReacaoModel();
+            $quoteReacao->setQuoteId($quoteId)
+                ->setUsuarioId($usuarioId)
+                ->setReacaoId($reacaoId);        
+    
             $status = 200;
-            $result = array();
-            $result["usuario_id"] = $usuarioId;
-            $result["quote_id"] = $quoteId;
             header('Content-Type: application/json');
-            return $response->withJson($result, $status);
+            return $response->withJson($quoteReacao, $status);
         } else {
             $status = 401;
             $result = array();

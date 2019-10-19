@@ -34,7 +34,9 @@ class QuoteDAO extends Connection
             q.quote_conteudo,
             q.quote_conteudo_ofensivo,
             q.quote_usuario_conteudo_ofensivo_id,
-            o.usuario_nome AS usuario_denuncia_nome
+            o.usuario_nome AS usuario_denuncia_nome,
+            LikeCount(q.quote_id) AS quote_gostei,
+            DislikeCount(q.quote_id) AS quote_naogostei
             FROM quote q
             INNER JOIN usuario u On q.usuario_id = u.usuario_id
             LEFT JOIN usuario o On q.quote_usuario_conteudo_ofensivo_id = o.usuario_id
@@ -56,7 +58,9 @@ class QuoteDAO extends Connection
                 ->setQuoteConteudo($item['quote_conteudo'])
                 ->setQuoteConteudoOfensivo($item['quote_conteudo_ofensivo'])
                 ->setQuoteUsuarioConteudoOfensivoId($item['quote_usuario_conteudo_ofensivo_id'])
-                ->setUsuarioDenunciaNome($item['usuario_denuncia_nome']);
+                ->setUsuarioDenunciaNome($item['usuario_denuncia_nome'])
+                ->setQuoteGostei($item['quote_gostei'])
+                ->setQuoteNaoGostei($item['quote_naogostei']);
 
                 $res[] = $quote;
         }
@@ -77,7 +81,9 @@ class QuoteDAO extends Connection
             q.quote_conteudo,
             q.quote_conteudo_ofensivo,
             q.quote_usuario_conteudo_ofensivo_id,
-            o.usuario_nome AS usuario_denuncia_nome
+            o.usuario_nome AS usuario_denuncia_nome,
+            LikeCount(q.quote_id) AS quote_gostei,
+            DislikeCount(q.quote_id) AS quote_naogostei
             FROM quote q
             INNER JOIN usuario u On q.usuario_id = u.usuario_id
             LEFT JOIN usuario o On q.quote_usuario_conteudo_ofensivo_id = o.usuario_id
@@ -96,7 +102,9 @@ class QuoteDAO extends Connection
                 ->setQuoteConteudo($data['quote_conteudo'])
                 ->setQuoteConteudoOfensivo($data['quote_conteudo_ofensivo'])
                 ->setQuoteUsuarioConteudoOfensivoId($data['quote_usuario_conteudo_ofensivo_id'])
-                ->setUsuarioDenunciaNome($data['usuario_denuncia_nome']);
+                ->setUsuarioDenunciaNome($data['usuario_denuncia_nome'])
+                ->setQuoteGostei($data['quote_gostei'])
+                ->setQuoteNaoGostei($data['quote_naogostei']);
 
             return $quote;
         }
