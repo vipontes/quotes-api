@@ -47,7 +47,7 @@ final class UsuarioModel implements JsonSerializable
     /**
      * Get the value of usuarioNome
      */ 
-    public function getUsuarioNome(): string
+    public function getUsuarioNome(): ?string
     {
         return $this->usuarioNome;
     }
@@ -65,7 +65,7 @@ final class UsuarioModel implements JsonSerializable
     /**
      * Get the value of usuarioEmail
      */ 
-    public function getUsuarioEmail(): string
+    public function getUsuarioEmail(): ?string
     {
         return $this->usuarioEmail;
     }
@@ -83,7 +83,7 @@ final class UsuarioModel implements JsonSerializable
     /**
      * Get the value of usuarioSenha
      */ 
-    public function getUsuarioSenha(): string
+    public function getUsuarioSenha(): ?string
     {
         return $this->usuarioSenha;
     }
@@ -101,7 +101,7 @@ final class UsuarioModel implements JsonSerializable
     /**
      * Get the value of usuarioAtivo
      */ 
-    public function getUsuarioAtivo(): int
+    public function getUsuarioAtivo(): ?int
     {
         return $this->usuarioAtivo;
     }
@@ -119,7 +119,7 @@ final class UsuarioModel implements JsonSerializable
     /**
      * Get the value of usuarioSobre
      */ 
-    public function getUsuarioSobre(): string
+    public function getUsuarioSobre(): ?string
     {
         return $this->usuarioSobre;
     }

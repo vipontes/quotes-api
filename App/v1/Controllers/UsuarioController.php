@@ -85,20 +85,29 @@ class UsuarioController extends BaseController
     {
         $input = $request->getParsedBody();
 
-        $requiredData = $this->verifyRequiredParameters(['usuario_id'], $input);
+        $requiredData = $this->verifyRequiredParameters(['usuarioId'], $input);
         if ($requiredData['success'] == false) {
             return $response->withJson($requiredData, 404);
         }
 
         if (count($input) <= 1) {
             $status = 400;
-            $response["success"] = false;
-            $response["message"] = ENDPOINT_PARAM_COUNT_ERROR;
-            return $this->response->withJson($response, $status);
+            $result = array();
+            $result["success"] = false;
+            $result["message"] = ENDPOINT_PARAM_COUNT_ERROR;
+            return $response->withJson($result, $status);
         }
 
+        $inputData = new UsuarioModel();
+        $inputData->setUsuarioId($input['usuarioId']);
+        $inputData->setUsuarioNome($input['usuarioNome']);
+        $inputData->setUsuarioEmail($input['usuarioEmail']);
+        $inputData->setUsuarioSenha($input['usuarioSenha']);
+        $inputData->setUsuarioAtivo($input['usuarioAtivo']);
+        $inputData->setUsuarioSobre($input['usuarioSobre']);
+
         $dataAccessObject = new UsuarioDAO();
-        $update = $dataAccessObject->putUsuario($input);
+        $update = $dataAccessObject->putUsuario($inputData);
 
         if ($update) {
             $status = 200;
@@ -179,7 +188,15 @@ class UsuarioController extends BaseController
             return $response->withJson($result, $status);
         }
 
-        if ($dataAccessObject->putUsuario(['usuario_id' => $usuarioId, 'usuario_senha' => $usuarioNovaSenha])) {
+        $inputData = new UsuarioModel();
+        $inputData->setUsuarioId($usuarioId);
+        $inputData->setUsuarioNome(null);
+        $inputData->setUsuarioEmail(null);
+        $inputData->setUsuarioSenha($novaSenhaHash);
+        $inputData->setUsuarioAtivo(null);
+        $inputData->setUsuarioSobre(null);
+
+        if ($dataAccessObject->putUsuario($inputData)) {
             $status = 200;
             $result = array();
             $result["success"] = true;
@@ -228,7 +245,15 @@ class UsuarioController extends BaseController
             Falta implementar o envio do e-mail e remover o campo newPass do retorno (solução provisória)
         */
 
-        if ($dataAccessObject->putUsuario(['usuario_id' => $usuarioModel->getUsuarioId(), 'usuario_senha' => $senhaHash])) {
+        $inputData = new UsuarioModel();
+        $inputData->setUsuarioId($usuarioModel->getUsuarioId());
+        $inputData->setUsuarioNome(null);
+        $inputData->setUsuarioEmail(null);
+        $inputData->setUsuarioSenha($senhaHash);
+        $inputData->setUsuarioAtivo(null);
+        $inputData->setUsuarioSobre(null);
+
+        if ($dataAccessObject->putUsuario($inputData)) {
             $status = 200;
             $result = array();
             $result["success"] = true;

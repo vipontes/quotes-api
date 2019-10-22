@@ -166,32 +166,37 @@ class UsuarioDAO extends Connection
         return null;
     }
 
-    public function putUsuario($input): bool {
+    public function putUsuario(UsuarioModel $inputData): bool {
 
         $fields = array();
         $values = array();
-        $fieldList = array(
-            "usuario_nome",
-            "usuario_email",
-            "usuario_ativo",
-            "usuario_sobre"
-        );
-    
-        foreach ($fieldList as $value) {
-            if (isset($input[$value]) == true) {
-                array_push($fields, "{$value} = :{$value}");
-                $values[':' . $value] = $input[$value];
-            }
+
+        if ( $inputData->getUsuarioNome() != null ) {
+            array_push($fields, "usuario_nome = :usuario_nome");
+            $values[':usuario_nome'] = $inputData->getUsuarioNome();
         }
-    
-        if (isset($input["usuario_senha"]) == true && strlen($input["usuario_senha"]) > 0) {
-            $hash = getenv('HASH_PASSWORD_KEY');
-            $senha_hash = Hash::create('sha512', $input["usuario_senha"], $hash);
+
+        if ( $inputData->getUsuarioEmail() != null ) {
+            array_push($fields, "usuario_email = :usuario_email");
+            $values[':usuario_email'] = $inputData->getUsuarioEmail();
+        }
+  
+        if ( $inputData->getUsuarioSenha() != null ) {
             array_push($fields, "usuario_senha = :usuario_senha");
-            $values[':usuario_senha'] = $senha_hash;
+            $values[':usuario_senha'] = $inputData->getUsuarioSenha();
         }
     
-        $values[':usuario_id'] = $input["usuario_id"];
+        if ( $inputData->getUsuarioAtivo() != null ) {
+            array_push($fields, "usuario_ativo = :usuario_ativo");
+            $values[':usuario_ativo'] = $inputData->getUsuarioAtivo();
+        }    
+        
+        if ( $inputData->getUsuarioSobre() != null ) {
+            array_push($fields, "usuario_sobre = :usuario_sobre");
+            $values[':usuario_sobre'] = $inputData->getUsuarioSobre();
+        }
+
+        $values[':usuario_id'] = $inputData->getUsuarioId();
     
         $str_fields = implode(",", $fields);
         $query = "UPDATE usuario SET " . $str_fields . " WHERE usuario_id = :usuario_id";
@@ -200,9 +205,12 @@ class UsuarioDAO extends Connection
             $sth = $this->pdo->prepare($query);
             $sth->execute($values);
 
-            $result = $sth->rowCount();
+            //$result = $sth->rowCount();
 
-            if ($result > 0) {
+            $error_array = $sth->errorInfo();
+            $error = (int) $error_array[1];
+
+            if ($error == 0) {
                 return true;
             } else {
                 $this->lastError = PDO_UPDATE_ERROR;
